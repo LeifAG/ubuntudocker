@@ -1,0 +1,26 @@
+services:
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress
+    hostname: wordpress
+    restart: always
+    networks:
+      - mysql-net
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wordpress:/var/www/html
+
+volumes:
+  wordpress:
+    name: wordpress
+    
+networks:
+  mysql-net:
+    external: true
+    name: mysql-net
