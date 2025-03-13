@@ -1,0 +1,32 @@
+services:
+  app:
+    image: 'jc21/nginx-proxy-manager:2.12.3'
+    container_name: nginxpm
+    hostname: nginxpm
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+      - '81:81'
+    environment:
+      DB_MYSQL_HOST: "db"
+      DB_MYSQL_PORT: 3306
+      DB_MYSQL_USER: "root"
+      DB_MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      DB_MYSQL_NAME: "npm"
+      WAIT_HOSTS: "db:3306"
+      WAIT_HOSTS_TIMEOUT: "60s"
+    volumes:
+      - data:/data
+      - letsencrypt:/etc/letsencrypt
+    networks:
+      - mysql-net
+
+networks:
+  mysql-net:
+    external: true
+    name: mysql-net
+
+volumes:
+  data:
+  letsencrypt:
